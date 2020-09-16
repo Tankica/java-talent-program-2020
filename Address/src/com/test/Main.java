@@ -13,13 +13,7 @@ public class Main {
         String userAddress = input.nextLine();
         String[] addressFields = userAddress.split(",");
 
-        int zipCode = Integer.parseInt(addressFields[3]);
-        int zipCodeLength = String.valueOf(zipCode).length();
-        if (zipCodeLength == 5 || zipCodeLength == 9) {
-            throw new InvalidZipCodeException("Zip Code can't be five or nine digit number ");
-        } else {
-            address = new Address(addressFields[0], Integer.parseInt(addressFields[1]), addressFields[2], zipCode);
-        }
+        address = new Address(addressFields[0], Integer.parseInt(addressFields[1]), addressFields[2], Integer.parseInt(addressFields[3]));
 
         System.out.println("You have enter the following address: " + address.toString());
     }

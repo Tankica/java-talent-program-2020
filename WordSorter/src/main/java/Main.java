@@ -20,7 +20,6 @@ public class Main {
 
         for (String s : words) {
             String word = s.replaceAll("[^a-zA-Z]", "").toLowerCase();
-
             if (!word.equals("") && !wordsList.contains(word)) {
                 wordsList.add(word);
             }

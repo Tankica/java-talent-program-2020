@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
-    <artifactId>WordSorter</artifactId>
+    <artifactId>WordCounter</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -20,4 +20,5 @@
             <version>2.8.0</version>
         </dependency>
     </dependencies>
+    
 </project>

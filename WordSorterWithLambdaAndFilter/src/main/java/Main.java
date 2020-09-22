@@ -27,24 +27,25 @@ public class Main {
         wordsList.addAll(set);
 
         if (sortingOrder.equals("DESC")) {
-            Collections.sort(wordsList,(String w1, String w2) -> w2.length() - w1.length());
+            Collections.sort(wordsList, (String w1, String w2) -> w2.length() - w1.length());
         } else if (sortingOrder.equals("ASC")) {
-            Collections.sort(wordsList,Comparator.comparingInt(String::length));
+            Collections.sort(wordsList, (String w1, String w2) -> w1.length() - w2.length());
         } else {
             throw new InvalidInputException("Invalid input, available options for input are ASC or DESC");
         }
 
-        if (min == 0 && max == 0) {
-            wordsList.forEach(System.out::println);
-        } else if (min >= max && max != 0) {
-            throw new InvalidInputException("Maximum should be 0 or greater than minimum ");
-        } else if (min == 0) {
-            wordsList.stream().filter(word -> word.length() <= max).forEach(System.out::println);
-        } else if (max == 0) {
-            wordsList.stream().filter(word -> word.length() >= min).forEach(System.out::println);
-        } else {
-            wordsList.stream().filter(word -> word.length() >= min && word.length() <= max).forEach(System.out::println);
-        }
+        List<String> list = wordsList.stream()
+                .filter(word -> {
+                    if (min == 0)
+                        return true;
+                    return word.length() >= min;
+                }).filter(word -> {
+                    if (max == 0)
+                        return true;
+                    return word.length() <= max;
+                }).collect(Collectors.toList());
+
+        list.forEach(System.out::println);
 
     }
 }

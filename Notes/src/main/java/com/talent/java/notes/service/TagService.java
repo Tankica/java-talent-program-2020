@@ -28,8 +28,8 @@ public class TagService {
         return tagRepository.save(tag);
     }
 
-    public List<Tag> findTags() {
-        return tagRepository.findAll();
+    public List<Tag> findTags(User user) {
+        return tagRepository.findByUser(user);
     }
 
     public Optional<Tag> findTag(Long id) {

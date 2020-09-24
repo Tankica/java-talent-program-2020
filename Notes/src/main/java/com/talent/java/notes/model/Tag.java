@@ -1,9 +1,6 @@
 package com.talent.java.notes.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 public class Tag {
@@ -14,13 +11,11 @@ public class Tag {
 
     private String name;
 
-    @ManyToMany(mappedBy = "tags", cascade = CascadeType.ALL)
-    private List<Note> notes;
-
     @ManyToOne
     private User user;
 
-    public Tag(){}
+    public Tag() {
+    }
 
     public Tag(String name, User user) {
         this.name = name;
@@ -37,11 +32,6 @@ public class Tag {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @JsonIgnore
-    public List<Note> getNotes() {
-        return notes;
     }
 
     public User getUser() {

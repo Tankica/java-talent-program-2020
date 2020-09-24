@@ -1,12 +1,15 @@
 package com.talent.java.notes.service;
 
 import com.talent.java.notes.model.Note;
+import com.talent.java.notes.model.Tag;
 import com.talent.java.notes.model.User;
 import com.talent.java.notes.repository.NoteRepository;
-import com.talent.java.notes.repository.TagRepository;
 import com.talent.java.notes.repository.UserRepository;
+import com.talent.java.notes.security.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +27,7 @@ public class NoteService {
     }
 
     public Note createNote(String title, String content, Long userId) {
-        User user = userRepository.findById(userId).get();
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         Note note = new Note(title, content, user);
         return noteRepository.save(note);
     }
@@ -33,13 +36,20 @@ public class NoteService {
         return noteRepository.findById(id);
     }
 
-    public List<Note> findNotes() {
-        return noteRepository.findAll();
+    public List<Note> findNotes(User user) {
+        return noteRepository.findByUser(user);
     }
 
     public void updateNote(Long id, String title, String content, Long userId) {
-        User user = userRepository.findById(userId).get();
-        noteRepository.update(title, content, user, id);
+        System.out.println("TEST " + id+ " "+ title+ " "+ content+ " "+ userId+ " ");
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        noteRepository.findById(id).ifPresent(note1 -> {
+            note1.setTitle(title);
+            note1.setContent(content);
+            note1.setUser(user);
+            noteRepository.save(note1);
+        });
     }
 
     public void deleteNote(Long id) {
@@ -50,4 +60,8 @@ public class NoteService {
         return noteRepository.findByTags_Id(tagId);
     }
 
+    public void deleteTagsFromNotes(Tag tag) {
+        noteRepository.findAll().forEach(note -> note.getTags().remove(tag));
+    }
 }
+

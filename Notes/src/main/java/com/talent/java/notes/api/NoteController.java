@@ -1,6 +1,8 @@
 package com.talent.java.notes.api;
 
 import com.talent.java.notes.model.Note;
+import com.talent.java.notes.model.User;
+import com.talent.java.notes.security.SecurityService;
 import com.talent.java.notes.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,16 +16,18 @@ import java.util.List;
 public class NoteController {
 
     private NoteService noteService;
+    private SecurityService securityService;
 
     @Autowired
-    public NoteController(NoteService noteService) {
+    public NoteController(NoteService noteService, SecurityService securityService) {
         this.noteService = noteService;
+        this.securityService = securityService;
     }
 
 
     @PostMapping("/notes")
     public Note createNote(@RequestBody NoteRequest note) {
-        return noteService.createNote(note.title, note.content,note.userId);
+        return noteService.createNote(note.title, note.content, note.userId);
     }
 
     @GetMapping("/notes/{id}")
@@ -33,12 +37,13 @@ public class NoteController {
 
     @GetMapping("/notes")
     public List<Note> findNotes() {
-        return noteService.findNotes();
+        User user = securityService.getAuthenticatedUsers();
+        return noteService.findNotes(user);
     }
 
     @PutMapping("/notes/{id}")
     public void updateNote(@PathVariable Long id, @RequestBody NoteRequest note) {
-         noteService.updateNote(id, note.title, note.content,note.userId);
+        noteService.updateNote(id, note.title, note.content, note.userId);
     }
 
     @DeleteMapping("/notes/{id}")
@@ -47,11 +52,11 @@ public class NoteController {
     }
 
     @GetMapping("/tags/{tagId}/notes")
-    public List<Note> findNotesByTagId(@PathVariable Long tagId){
+    public List<Note> findNotesByTagId(@PathVariable Long tagId) {
         return noteService.findNotesByTagId(tagId);
     }
 
-    public static class NoteRequest{
+    public static class NoteRequest {
         public String title;
         public String content;
         public Long userId;

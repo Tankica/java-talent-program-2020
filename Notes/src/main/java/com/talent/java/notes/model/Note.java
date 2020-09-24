@@ -1,5 +1,7 @@
 package com.talent.java.notes.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -57,6 +59,14 @@ public class Note {
         this.user = user;
     }
 
+    @JsonIgnore
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
 
     @Override
     public String toString() {

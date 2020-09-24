@@ -1,5 +1,7 @@
 package com.talent.java.notes.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,7 +17,9 @@ public class User {
 
     private String password;
 
-    public User(){}
+    public User() {
+    }
+
     public User(Long id, String username, String password) {
         this.id = id;
         this.username = username;
@@ -34,6 +38,7 @@ public class User {
         this.username = username;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }

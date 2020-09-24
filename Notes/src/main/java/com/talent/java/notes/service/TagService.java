@@ -3,7 +3,6 @@ package com.talent.java.notes.service;
 import com.talent.java.notes.model.Tag;
 import com.talent.java.notes.model.User;
 import com.talent.java.notes.repository.TagRepository;
-import com.talent.java.notes.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,16 +13,13 @@ import java.util.Optional;
 public class TagService {
 
     private TagRepository tagRepository;
-    private UserRepository userRepository;
 
     @Autowired
-    public TagService(TagRepository tagRepository, UserRepository userRepository) {
+    public TagService(TagRepository tagRepository) {
         this.tagRepository = tagRepository;
-        this.userRepository = userRepository;
     }
 
-    public Tag createTag(String name, Long userId) {
-        User user = userRepository.findById(userId).get();
+    public Tag createTag(String name, User user) {
         Tag tag = new Tag(name, user);
         return tagRepository.save(tag);
     }

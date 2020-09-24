@@ -5,11 +5,8 @@ import com.talent.java.notes.model.Tag;
 import com.talent.java.notes.model.User;
 import com.talent.java.notes.repository.NoteRepository;
 import com.talent.java.notes.repository.UserRepository;
-import com.talent.java.notes.security.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,16 +15,13 @@ import java.util.Optional;
 public class NoteService {
 
     private NoteRepository noteRepository;
-    private UserRepository userRepository;
 
     @Autowired
-    public NoteService(NoteRepository noteRepository, UserRepository userRepository) {
+    public NoteService(NoteRepository noteRepository) {
         this.noteRepository = noteRepository;
-        this.userRepository = userRepository;
     }
 
-    public Note createNote(String title, String content, Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public Note createNote(String title, String content, User user) {
         Note note = new Note(title, content, user);
         return noteRepository.save(note);
     }
@@ -40,15 +34,11 @@ public class NoteService {
         return noteRepository.findByUser(user);
     }
 
-    public void updateNote(Long id, String title, String content, Long userId) {
-        System.out.println("TEST " + id+ " "+ title+ " "+ content+ " "+ userId+ " ");
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-        noteRepository.findById(id).ifPresent(note1 -> {
-            note1.setTitle(title);
-            note1.setContent(content);
-            note1.setUser(user);
-            noteRepository.save(note1);
+    public void updateNote(Long id, String title, String content) {
+        noteRepository.findById(id).ifPresent(note -> {
+            note.setTitle(title);
+            note.setContent(content);
+            noteRepository.save(note);
         });
     }
 

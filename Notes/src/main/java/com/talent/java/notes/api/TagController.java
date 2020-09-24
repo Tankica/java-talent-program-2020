@@ -29,12 +29,12 @@ public class TagController {
 
     @PostMapping
     public Tag createTag(@RequestBody CreateTagRequest tagRequest) {
-        return tagService.createTag(tagRequest.name, tagRequest.userId);
+        User user = securityService.getAuthenticatedUsers();
+        return tagService.createTag(tagRequest.name,user);
     }
 
     public static class CreateTagRequest {
         public String name;
-        public Long userId;
     }
 
     @GetMapping("/{id}")

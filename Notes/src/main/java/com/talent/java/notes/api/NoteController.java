@@ -27,7 +27,8 @@ public class NoteController {
 
     @PostMapping("/notes")
     public Note createNote(@RequestBody NoteRequest note) {
-        return noteService.createNote(note.title, note.content, note.userId);
+        User user = securityService.getAuthenticatedUsers();
+        return noteService.createNote(note.title, note.content, user);
     }
 
     @GetMapping("/notes/{id}")
@@ -43,7 +44,7 @@ public class NoteController {
 
     @PutMapping("/notes/{id}")
     public void updateNote(@PathVariable Long id, @RequestBody NoteRequest note) {
-        noteService.updateNote(id, note.title, note.content, note.userId);
+        noteService.updateNote(id, note.title, note.content);
     }
 
     @DeleteMapping("/notes/{id}")
@@ -59,6 +60,5 @@ public class NoteController {
     public static class NoteRequest {
         public String title;
         public String content;
-        public Long userId;
     }
 }

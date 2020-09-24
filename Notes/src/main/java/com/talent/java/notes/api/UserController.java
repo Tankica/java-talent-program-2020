@@ -5,11 +5,13 @@ import com.talent.java.notes.security.SecurityService;
 import com.talent.java.notes.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/users")
 public class UserController {
 
 
@@ -23,12 +25,12 @@ public class UserController {
         this.securityService = securityService;
     }
 
-    @GetMapping("/api/users")
+    @GetMapping
     public List<User> findUsers() {
         return userService.findUsers();
     }
 
-    @GetMapping("/api/users/me")
+    @GetMapping("/me")
     public User findAuthenticatedUsers() {
         return securityService.getAuthenticatedUsers();
     }

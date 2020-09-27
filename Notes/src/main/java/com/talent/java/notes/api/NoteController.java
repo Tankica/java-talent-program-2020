@@ -1,8 +1,6 @@
 package com.talent.java.notes.api;
 
 import com.talent.java.notes.model.Note;
-import com.talent.java.notes.model.User;
-import com.talent.java.notes.security.SecurityService;
 import com.talent.java.notes.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,41 +8,40 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api")
 public class NoteController {
 
     private NoteService noteService;
-    private SecurityService securityService;
 
     @Autowired
-    public NoteController(NoteService noteService, SecurityService securityService) {
+    public NoteController(NoteService noteService) {
         this.noteService = noteService;
-        this.securityService = securityService;
     }
 
 
     @PostMapping("/notes")
     public Note createNote(@RequestBody NoteRequest note) {
-        User user = securityService.getAuthenticatedUsers();
-        return noteService.createNote(note.title, note.content, user);
+        return noteService.createNote(note.title, note.content, note.tagsId);
     }
 
     @GetMapping("/notes/{id}")
     public Note findNote(@PathVariable Long id) {
-        return noteService.findNote(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return noteService.findNote(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping("/notes")
     public List<Note> findNotes() {
-        User user = securityService.getAuthenticatedUsers();
-        return noteService.findNotes(user);
+        return noteService.findNotes();
     }
 
     @PutMapping("/notes/{id}")
-    public void updateNote(@PathVariable Long id, @RequestBody NoteRequest note) {
-        noteService.updateNote(id, note.title, note.content);
+    public Note updateNote(@PathVariable Long id, @RequestBody NoteRequest note) {
+       return noteService.updateNote(id, note.title, note.content,note.tagsId)
+               .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @DeleteMapping("/notes/{id}")
@@ -60,5 +57,6 @@ public class NoteController {
     public static class NoteRequest {
         public String title;
         public String content;
+        public Set<Long> tagsId;
     }
 }

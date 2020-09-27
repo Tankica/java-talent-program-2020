@@ -16,7 +16,6 @@ public class UserController {
 
 
     private UserService userService;
-
     private SecurityService securityService;
 
     @Autowired

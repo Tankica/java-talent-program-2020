@@ -1,7 +1,5 @@
 package com.talent.java.notes.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -25,10 +23,11 @@ public class Note {
     public Note() {
     }
 
-    public Note(String title, String content, User user) {
+    public Note(String title, String content, User user, List<Tag> tags) {
         this.title = title;
         this.content = content;
         this.user = user;
+        this.tags = tags;
     }
 
     public Long getId() {
@@ -59,7 +58,6 @@ public class Note {
         this.user = user;
     }
 
-    @JsonIgnore
     public List<Tag> getTags() {
         return tags;
     }

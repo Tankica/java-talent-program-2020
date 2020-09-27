@@ -1,9 +1,6 @@
 package com.talent.java.notes.api;
 
 import com.talent.java.notes.model.Tag;
-import com.talent.java.notes.model.User;
-import com.talent.java.notes.security.SecurityService;
-import com.talent.java.notes.service.NoteService;
 import com.talent.java.notes.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,20 +14,15 @@ import java.util.List;
 public class TagController {
 
     private TagService tagService;
-    private SecurityService securityService;
-    private NoteService noteService;
 
     @Autowired
-    public TagController(TagService tagService, SecurityService securityService, NoteService noteService) {
+    public TagController(TagService tagService) {
         this.tagService = tagService;
-        this.securityService = securityService;
-        this.noteService = noteService;
     }
 
     @PostMapping
     public Tag createTag(@RequestBody CreateTagRequest tagRequest) {
-        User user = securityService.getAuthenticatedUsers();
-        return tagService.createTag(tagRequest.name,user);
+        return tagService.createTag(tagRequest.name);
     }
 
     public static class CreateTagRequest {
@@ -39,19 +31,17 @@ public class TagController {
 
     @GetMapping("/{id}")
     public Tag findTag(@PathVariable Long id) {
-        return tagService.findTag(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return tagService.findTag(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping
     public List<Tag> findTags() {
-        User user = securityService.getAuthenticatedUsers();
-        return tagService.findTags(user);
+        return tagService.findTags();
     }
 
     @DeleteMapping("/{id}")
     public void deleteTag(@PathVariable Long id) {
-        Tag tag = tagService.findTag(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        noteService.deleteTagsFromNotes(tag);
         tagService.deleteTag(id);
     }
 }

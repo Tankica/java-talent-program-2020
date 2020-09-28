@@ -19,13 +19,13 @@ class MainTest {
     @Test
     void sortWords_ascending() {
         Main.sortWords("ASC", wordList);
-        Assertions.assertLinesMatch(wordList, Arrays.asList("a", "sd", "sit", "Lorem", "consectetur", "exercitation"));
+        Assertions.assertLinesMatch(Arrays.asList("a", "sd", "sit", "Lorem", "consectetur", "exercitation"), wordList);
     }
 
     @Test
     void sortWords_descending() {
         Main.sortWords("DESC", wordList);
-        Assertions.assertLinesMatch(wordList, Arrays.asList("exercitation", "consectetur", "Lorem", "sit", "sd", "a"));
+        Assertions.assertLinesMatch(Arrays.asList("exercitation", "consectetur", "Lorem", "sit", "sd", "a"), wordList);
     }
 
     @Test
@@ -38,25 +38,25 @@ class MainTest {
     @Test
     void filterWords_minMaxDifferentFromZero() {
         wordList = Main.filterWords(1, 5, wordList);
-        Assertions.assertLinesMatch(wordList, Arrays.asList("Lorem", "sit", "sd", "a"));
+        Assertions.assertLinesMatch(Arrays.asList("Lorem", "sit", "sd", "a"), wordList);
     }
 
     @Test
     void filterWords_minEqualsToZero() {
         wordList = Main.filterWords(0, 5, wordList);
-        Assertions.assertLinesMatch(wordList, Arrays.asList("Lorem", "sit", "sd", "a"));
+        Assertions.assertLinesMatch(Arrays.asList("Lorem", "sit", "sd", "a"), wordList);
     }
 
     @Test
     void filterWords_maxEqualsToZero() {
         wordList = Main.filterWords(5, 0, wordList);
-        Assertions.assertLinesMatch(wordList, Arrays.asList("exercitation", "consectetur", "Lorem"));
+        Assertions.assertLinesMatch(Arrays.asList("exercitation", "consectetur", "Lorem"), wordList);
     }
 
     @Test
     void filterWords_minMaxEqualsToZero() {
         wordList = Main.filterWords(0, 0, wordList);
-        Assertions.assertLinesMatch(wordList, Arrays.asList("exercitation", "consectetur", "Lorem", "sit", "sd", "a"));
+        Assertions.assertLinesMatch(Arrays.asList("exercitation", "consectetur", "Lorem", "sit", "sd", "a"), wordList);
     }
 
 }

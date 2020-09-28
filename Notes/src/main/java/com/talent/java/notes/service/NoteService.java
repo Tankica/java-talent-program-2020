@@ -31,12 +31,14 @@ public class NoteService {
 
     public Note createNote(String title, String content, Set<Long> tagsId) {
 
-        User user = securityService.getAuthenticatedUsers();
-        ArrayList<Tag> tags = (ArrayList<Tag>) tagsId.stream()
-                .map(tagId -> tagRepository.findById(tagId).get())
-                .collect(Collectors.toList());
-
-        Note note = new Note(title, content, user, tags);
+        User user = securityService.getAuthenticatedUser();
+        Note note;
+        if (tagsId != null && !tagsId.isEmpty()) {
+            ArrayList<Tag> tags = (ArrayList<Tag>) tagRepository.findAllById(tagsId);
+            note = new Note(title, content, user, tags);
+        } else {
+            note = new Note(title, content, user);
+        }
         return noteRepository.save(note);
     }
 
@@ -45,21 +47,18 @@ public class NoteService {
     }
 
     public List<Note> findNotes() {
-        User user = securityService.getAuthenticatedUsers();
+        User user = securityService.getAuthenticatedUser();
         return noteRepository.findByUser(user);
     }
 
-    public Optional<Note> updateNote(Long id, String title, String content, Set<Long> tagsId) {
-
-        return noteRepository.findById(id).map(note -> {
-            note.setTitle(title);
-            note.setContent(content);
-            note.setTags(tagsId.stream()
-                    .map(tagId -> tagRepository.findById(tagId).get())
-                    .collect(Collectors.toList()));
-            noteRepository.save(note);
-            return note;
-        });
+    public Note updateNote(Long id, String title, String content, Set<Long> tagsId) {
+        Note note = noteRepository.findById(id).get();
+        note.setTitle(title);
+        note.setContent(content);
+        if (tagsId != null && !tagsId.isEmpty()) {
+            note.setTags(tagRepository.findAllById(tagsId));
+        }
+        return noteRepository.save(note);
     }
 
     public void deleteNote(Long id) {

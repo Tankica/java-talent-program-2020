@@ -6,7 +6,6 @@ import com.talent.java.notes.repository.TagRepository;
 import com.talent.java.notes.security.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +25,7 @@ public class TagService {
     }
 
     public Tag createTag(String name) {
-        User user = securityService.getAuthenticatedUsers();
+        User user = securityService.getAuthenticatedUser();
 
         Tag tag = new Tag(name, user);
         return tagRepository.save(tag);
@@ -37,7 +36,7 @@ public class TagService {
     }
 
     public List<Tag> findTags() {
-        User user = securityService.getAuthenticatedUsers();
+        User user = securityService.getAuthenticatedUser();
         return tagRepository.findByUser(user);
     }
 

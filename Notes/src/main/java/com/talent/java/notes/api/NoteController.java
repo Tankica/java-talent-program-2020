@@ -40,8 +40,8 @@ public class NoteController {
 
     @PutMapping("/notes/{id}")
     public Note updateNote(@PathVariable Long id, @RequestBody NoteRequest note) {
-       return noteService.updateNote(id, note.title, note.content,note.tagsId)
-               .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        System.out.println("TEST " +note);
+       return noteService.updateNote(id, note.title, note.content,note.tagsId);
     }
 
     @DeleteMapping("/notes/{id}")

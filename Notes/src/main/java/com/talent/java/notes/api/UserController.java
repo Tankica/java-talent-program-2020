@@ -31,6 +31,6 @@ public class UserController {
 
     @GetMapping("/me")
     public User findAuthenticatedUsers() {
-        return securityService.getAuthenticatedUsers();
+        return securityService.getAuthenticatedUser();
     }
 }

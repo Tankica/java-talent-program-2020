@@ -14,10 +14,18 @@
 **/*.iws
 **/*.iml
 **/*.ipr
-.idea/
 
 
 
 ### Compiled ###
 **/target
 **/out
+
+
+### For Frontend ###
+node_modules
+.idea
+*.ignored.*
+.opt-in
+.opt-out
+*/exercises-final

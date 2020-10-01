@@ -48,17 +48,20 @@ class EditNoteForm extends Component {
     checkAndDisplayErrors() {
         this.setState({disable: !(this.state.title.length && this.state.content.length && this.state.title.length <= 10) });
 
+        let error =  this.state.errors;
         if (!this.state.title.length)
-            this.state.errors["title"] = "Title is a mandatory field";
+            error.title = "Title is a mandatory field";
         else if (this.state.title.length > 10)
-            this.state.errors["title"] = "Title cannot contain more than 10 characters";
+            error.title = "Title cannot contain more than 10 characters";
         else
-            this.state.errors["title"]= "";
+            error.title = "";
 
         if(!this.state.content.length)
-            this.state.errors["content"] = "Content is a mandatory field";
+            error.content = "Content is a mandatory field";
         else
-            this.state.errors["content"] ="";
+            error.content = "";
+
+        this.setState({errors:error});
     }
 
     render() {

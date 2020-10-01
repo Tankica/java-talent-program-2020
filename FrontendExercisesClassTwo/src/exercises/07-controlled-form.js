@@ -11,18 +11,18 @@ import React, {Component} from 'react';
 //
 //     <input value={this.state.value} />
 //
-// This gives you a lot more power over the input. 
+// This gives you a lot more power over the input.
 
 // Exercise:
 //   Render a EditNote form with an onSubmit handler that alerts the value of both title and content
 //   while saving their data in the local component state
 //   The submit button needs to be disabled if there is an error.
-//   Error message needs to be displayed when: 
+//   Error message needs to be displayed when:
 //     - The title is empty - "Title is a mandatory field"
 //     - The content is empty - "Content is a mandatory field"
 //     - The title contains more than 10 characters - "Title cannot contain more than 10 characters"
 //   Since this is a EditNote functionality, we need to make sure to display the 'Default Title' and 'Default Content'
-//   when our component is rendered. 
+//   when our component is rendered.
 class EditNoteForm extends Component {
 
     constructor(props) {
@@ -30,7 +30,8 @@ class EditNoteForm extends Component {
         this.state = {
             title: props.defaultTitle,
             content: props.defaultContent,
-            disable: true
+            disable: true,
+            errors: {}
         };
     }
 
@@ -45,21 +46,33 @@ class EditNoteForm extends Component {
     onSubmit = () => alert(`${this.state.title} ${this.state.content}`);
 
     checkAndDisplayErrors() {
-        this.setState({
-            disable: !(this.state.title.length && this.state.content.length && this.state.title.length <= 10)
-        });
-        if (!this.state.title.length) console.error("Title is a mandatory field");
-        if (!this.state.content.length) console.error("Content is a mandatory field");
-        if (this.state.title.length > 10) console.error("Title cannot contain more than 10 characters");
+        this.setState({disable: !(this.state.title.length && this.state.content.length && this.state.title.length <= 10) });
+
+        if (!this.state.title.length)
+            this.state.errors["title"] = "Title is a mandatory field";
+        else if (this.state.title.length > 10)
+            this.state.errors["title"] = "Title cannot contain more than 10 characters";
+        else
+            this.state.errors["title"]= "";
+
+        if(!this.state.content.length)
+            this.state.errors["content"] = "Content is a mandatory field";
+        else
+            this.state.errors["content"] ="";
     }
 
     render() {
         return <div>
             <form onSubmit={this.onSubmit}>
                 <input name="title" value={this.state.title} onChange={this.onChangeData} placeholder="Title"/>
+                <span style={{color: "red"}}>{this.state.errors["title"]}</span><br/>
+
                 <input name="content" value={this.state.content} onChange={this.onChangeData} placeholder="Content"/>
+                <span style={{color: "red"}}>{this.state.errors["content"]}</span><br/>
+
                 <button disabled={this.state.disable}>Click</button>
             </form>
+
         </div>;
     }
 }

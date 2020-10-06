@@ -30,7 +30,6 @@ class EditNoteForm extends Component {
         this.state = {
             title: props.defaultTitle,
             content: props.defaultContent,
-            disable: true,
             errors: {}
         };
     }
@@ -46,22 +45,18 @@ class EditNoteForm extends Component {
     onSubmit = () => alert(`${this.state.title} ${this.state.content}`);
 
     checkAndDisplayErrors() {
-        this.setState({disable: !(this.state.title.length && this.state.content.length && this.state.title.length <= 10) });
 
-        let error =  this.state.errors;
-        if (!this.state.title.length)
-            error.title = "Title is a mandatory field";
-        else if (this.state.title.length > 10)
-            error.title = "Title cannot contain more than 10 characters";
-        else
-            error.title = "";
+        let error = this.state.errors;
 
-        if(!this.state.content.length)
-            error.content = "Content is a mandatory field";
-        else
-            error.content = "";
+        !this.state.title.length ? error.title = "Title is a mandatory field"
+            : this.state.title.length > 10 ? error.title = "Title cannot contain more than 10 characters"
+            : error = {};
 
-        this.setState({errors:error});
+        !this.state.content.length ? error.content = "Content is a mandatory field"
+            : error.title ? error.content = ""
+            : error = {};
+
+        this.setState({errors: error});
     }
 
     render() {
@@ -73,7 +68,7 @@ class EditNoteForm extends Component {
                 <input name="content" value={this.state.content} onChange={this.onChangeData} placeholder="Content"/>
                 <span style={{color: "red"}}>{this.state.errors.content}</span><br/>
 
-                <button disabled={this.state.disable}>Click</button>
+                <button disabled={Object.keys(this.state.errors).length > 0}>Click</button>
             </form>
 
         </div>;

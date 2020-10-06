@@ -1,5 +1,6 @@
 package com.talent.java.notes.service;
 
+import com.talent.java.notes.model.Note;
 import com.talent.java.notes.model.Tag;
 import com.talent.java.notes.model.User;
 import com.talent.java.notes.repository.TagRepository;
@@ -38,6 +39,12 @@ public class TagService {
     public List<Tag> findTags() {
         User user = securityService.getAuthenticatedUser();
         return tagRepository.findByUser(user);
+    }
+
+    public Tag updateTag(Long id, String name) {
+        Tag tag = tagRepository.findById(id).get();
+        tag.setName(name);
+        return tagRepository.save(tag);
     }
 
     public void deleteTag(Long id) {

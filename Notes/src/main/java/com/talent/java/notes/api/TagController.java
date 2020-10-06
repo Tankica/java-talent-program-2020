@@ -21,11 +21,11 @@ public class TagController {
     }
 
     @PostMapping
-    public Tag createTag(@RequestBody CreateTagRequest tagRequest) {
+    public Tag createTag(@RequestBody TagRequest tagRequest) {
         return tagService.createTag(tagRequest.name);
     }
 
-    public static class CreateTagRequest {
+    public static class TagRequest {
         public String name;
     }
 
@@ -38,6 +38,11 @@ public class TagController {
     @GetMapping
     public List<Tag> findTags() {
         return tagService.findTags();
+    }
+
+    @PutMapping("/{id}")
+    public Tag updateTag(@PathVariable Long id, @RequestBody TagRequest tag) {
+        return tagService.updateTag(id, tag.name);
     }
 
     @DeleteMapping("/{id}")

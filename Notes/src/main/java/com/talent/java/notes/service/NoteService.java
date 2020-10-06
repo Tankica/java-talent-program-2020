@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class NoteService {
@@ -66,7 +65,7 @@ public class NoteService {
     }
 
     public List<Note> findNotesByTagId(Long tagId) {
-        return noteRepository.findByTags_Id(tagId);
+        return noteRepository.findByTags_IdAndUser(tagId, securityService.getAuthenticatedUser());
     }
 
     public void deleteTagsFromNotes(Tag tag) {
